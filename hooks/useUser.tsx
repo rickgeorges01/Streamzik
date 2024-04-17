@@ -6,6 +6,7 @@ import {useSessionContext, useUser as useSupaUser } from "@supabase/auth-helpers
 //Définition du type de contexte utilisateur
 type UserContextType = {
     accessToken: string | null;
+    user: User | null;
     userDetails : UserDetails | null;
     isLoading : boolean;
     subscription : Subscription | null;
