@@ -9,6 +9,8 @@ import useAuthModal from "@/hooks/useAuthModal";
 import {useSupabaseClient} from "@supabase/auth-helpers-react";
 import {useUser} from "@/hooks/useUser";
 import {FaUserAlt} from "react-icons/fa";
+import toast from "react-hot-toast";
+
 
 interface HeaderProps  {
     children : React.ReactNode;
@@ -18,16 +20,24 @@ const Header : React.FC<HeaderProps> = ({
         children,
         className
      }) => {
+    // Initialisation du hook useAuthModal
     const authModal= useAuthModal();
+    // Initialisation du hook useRouter pour gérer la navigation
     const router = useRouter();
+    // Initialisation du hook useSupabaseClient pour interagir avec Supabase
     const supabaseClient = useSupabaseClient();
+    // Récupération des informations de l'utilisateur connecté
     const {user} = useUser();
+
+    // Fonction pour gérer la déconnexion de l'utilisateur
     const handleLogout = async () => {
         const {error} = await supabaseClient.auth.signOut();
         //TODO : reset any playing songs
         router.refresh()
         if(error){
-            console.log(error);
+            toast.error(error.message)
+        } else {
+            toast.success('Logged out successfully !')
         }
     }
     return (
@@ -46,6 +56,7 @@ const Header : React.FC<HeaderProps> = ({
                 items-center
                 justify-between
             ">
+                {/* Boutons de navigation (précédent et suivant) pour les appareils de taille moyenne et grande */}
                 <div className="
                     hidden
                     md:flex
@@ -118,6 +129,7 @@ const Header : React.FC<HeaderProps> = ({
                     </button>
                 </div>
 
+                {/* Affichage des boutons de connexion/déconnexion et du profil utilisateur */}
                 <div className="
                     flex
                     justify-between
@@ -125,6 +137,7 @@ const Header : React.FC<HeaderProps> = ({
                     gap-x-4
                 ">
                     {user ? (
+                        // Si l'utilisateur est connecté
                         <div className="flex gap-x-4 items-center">
                             <Button
                                 onClick={handleLogout}
@@ -140,6 +153,7 @@ const Header : React.FC<HeaderProps> = ({
                             </Button>
                         </div>
                     ) : (
+                        // Si l'utilisateur n'est pas connecté
                         <Fragment>
                             <div>
                                 <Button
