@@ -8,6 +8,8 @@ interface ModalProps {
     description:string
     children: React.ReactNode;
 }
+
+// Définition du composant Modal comme une fonction composant
 const Modal: React.FC<ModalProps> = ({
     isOpen,
     onChange,
@@ -17,10 +19,14 @@ const Modal: React.FC<ModalProps> = ({
 }) => {
     return (
         <Dialog.Root
+            // Propriété indiquant si la modale est ouverte ou fermée
             open={isOpen}
+            //Indique si la modale doit être ouverte par défaut
             defaultOpen={isOpen}
+            // Fonction de gestion du changement d'état de la modale
             onOpenChange={onChange}
         >
+            {/* Composants de la modale */}
             <Dialog.Portal>
                 <Dialog.Overlay
                     className="
