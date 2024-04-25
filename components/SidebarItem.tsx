@@ -1,5 +1,6 @@
 import {IconType} from "react-icons";
 import Link from "next/link";
+// Importation de la fonction twMerge depuis le package "tailwind-merge" afin de prendre plusieurs arguments
 import {twMerge} from "tailwind-merge";
 
 // Déclaration de l'interface des props, spécifiant la prop children pour le support des composants imbriqués.

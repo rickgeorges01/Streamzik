@@ -1,11 +1,14 @@
 "use client"
 import Modal from "@/components/Modal";
+// Importation de la fonction uniqid depuis le module "uniqid" pour générer des identifiants uniques
 import uniqid from "uniqid";
 import useUploadModal from "@/hooks/useUploadModal";
+// Importation des fonctionnalités useForm et SubmitHandler depuis le module "react-hook-form" pour gérer le formulaire
 import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
 import {useState} from "react";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+// Importation de la fonction toast depuis le module "react-hot-toast" pour afficher des notifications
 import toast from "react-hot-toast";
 import {useUser} from "@/hooks/useUser";
 import {useSupabaseClient} from "@supabase/auth-helpers-react";

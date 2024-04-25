@@ -12,6 +12,16 @@ export interface UserDetails {
     payment_method?: Stripe.PaymentMethod[Stripe.PaymentMethod.Type]
 }
 
+// Interface pour les détails d'un song.
+export interface Song {
+    id: string;
+    user_id: string;
+    author: string;
+    title: string;
+    song_path: string;
+    image_path: string;
+}
+
 // Interface pour les détails d'un produit.
 export interface Product {
     id: string;
