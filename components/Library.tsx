@@ -8,9 +8,17 @@ import { AiOutlinePlus } from "react-icons/ai";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import useUploadModal from "@/hooks/useUploadModal";
+import {Song} from "@/types";
+import MediaItem from "@/components/MediaItem";
 
+
+interface LibraryProps {
+    songs : Song[];
+}
 // Définition du composant Library
-const Library = () => {
+const Library : React.FC<LibraryProps> = ({
+    songs
+                                          }) => {
     // Utilisation du hook useAuthModal pour la gestion de la modal d'authentification
     const authModal = useAuthModal();
     // Utilisation du hook useUploadModal pour la gestion de la modal de téléchargement
@@ -80,7 +88,13 @@ const Library = () => {
                     px-3
                 "
             >
-                Lists of songs
+                {songs.map((item)=>(
+                    <MediaItem
+                        onClick={()=>{}}
+                        key={item.id}
+                        data={item}
+                    />
+                ))}
             </div>
         </div>
     );

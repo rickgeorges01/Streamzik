@@ -8,14 +8,17 @@ import {BiSearch} from "react-icons/bi";
 import Box from "@/components/Box";
 import SidebarItem from "@/components/SidebarItem";
 import Library from "@/components/Library";
+import {Song} from "@/types";
 
 // Déclaration de l'interface des props, spécifiant la prop children pour le support des composants imbriqués.
 interface SidebarProps {
     children : React.ReactNode
+    songs : Song[]
 }
 // Définition du composant fonctionnel Sidebar avec la prop children déstructurée.
 const Sidebar : React.FC<SidebarProps>= ({
-    children
+    children,
+    songs
 }) => {
 
     // Obtention du chemin de la route actuelle pour le style du lien actif.
@@ -69,7 +72,7 @@ const Sidebar : React.FC<SidebarProps>= ({
             </Box>
 
             <Box className="overflow-y-auto h-full">
-                <Library>
+                <Library songs = {songs}>
 
                 </Library>
             </Box>
