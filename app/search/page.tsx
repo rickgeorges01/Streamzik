@@ -12,6 +12,7 @@ interface SearchProps {
         title: string;
     };
 }
+export const revalidate = 0;
 
 // Définition du composant Search
 const Search = async ({ searchParams }: SearchProps) => {
