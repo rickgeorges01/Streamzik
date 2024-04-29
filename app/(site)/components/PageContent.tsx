@@ -2,6 +2,7 @@
 
 import { Song } from "@/types";// Importation du composant SongItem depuis le répertoire "@/components/SongItem"
 import SongItem from "@/components/SongItem";
+import useOnPlay from "@/hooks/useOnPlay";
 
 // Définition de l'interface PageContentProps pour décrire les propriétés attendues par le composant PageContent
 interface PageContentProps {
@@ -13,6 +14,7 @@ interface PageContentProps {
 const PageContent: React.FC<PageContentProps> = ({
                                                      songs
 }) => {
+    const onPlay = useOnPlay(songs);
     // Vérifie s'il n'y a pas de chansons disponibles
     if (songs.length === 0) {
         // Renvoie un message indiquant qu'il n'y a pas de chansons disponibles si le tableau de chansons est vide
@@ -42,7 +44,7 @@ const PageContent: React.FC<PageContentProps> = ({
                 <SongItem
                     // Utilise l'identifiant unique de chaque chanson comme clé
                     key={item.id}
-                    onClick={() => {}}
+                    onClick={(id) => {onPlay(id)}}
                     // Passe les données de chaque chanson au composant SongItem
                     data={item}
                 />

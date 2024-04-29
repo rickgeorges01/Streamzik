@@ -1,3 +1,15 @@
+/**
+ * Middleware pour la gestion de l'authentification avec Supabase dans Next.js.
+ * Ce middleware intercepte les requêtes pour vérifier la session de l'utilisateur via Supabase,
+ * assurant que l'utilisateur est authentifié avant de poursuivre le traitement de la requête.
+ * - `createMiddlewareClient` configure une instance de Supabase adaptée aux interactions dans un environnement middleware.
+ * - `supabase.auth.getSession()` récupère la session de l'utilisateur, permettant de gérer l'accès en fonction de l'état de l'authentification.
+ * Utilisé principalement pour sécuriser les routes et les fonctionnalités qui nécessitent une vérification de l'authentification utilisateur.
+ */
+
+
+
+
 // Importation de la fonction createMiddlewareClient depuis le package "@supabase/auth-helpers-nextjs"
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 // Importation des types NextRequest et NextResponse depuis le module "next/server"

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Header from "@/components/Header";
 import ListItem from "@/components/ListItem";
 import getSongs from "@/actions/getSongs";
-import PageContent from "@/components/PageContent";
+import PageContent from "@/app/(site)/components/PageContent";
 
 // Configure la stratégie de mise en cache des pages statiques.
 // Une valeur de 0 signifie que la page est toujours régénérée à chaque demande.

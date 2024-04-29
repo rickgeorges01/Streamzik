@@ -9,6 +9,8 @@ import Box from "@/components/Box";
 import SidebarItem from "@/components/SidebarItem";
 import Library from "@/components/Library";
 import {Song} from "@/types";
+import usePlayer from "@/hooks/usePlayer";
+import {twMerge} from "tailwind-merge";
 
 // Déclaration de l'interface des props, spécifiant la prop children pour le support des composants imbriqués.
 interface SidebarProps {
@@ -23,6 +25,8 @@ const Sidebar : React.FC<SidebarProps>= ({
 
     // Obtention du chemin de la route actuelle pour le style du lien actif.
     const pathname = usePathname();
+
+    const player = usePlayer();
 
     // Tableau des routes mémorisé pour optimiser les re-rendus, dépendant de pathname pour l'état actif.
     const routes = useMemo(()=>[
@@ -41,7 +45,12 @@ const Sidebar : React.FC<SidebarProps>= ({
 
     ],[pathname])
     return (
-        <div className="flex h-full">
+        <div className={twMerge(`
+            flex
+            h-full
+        `,
+            player.activeId && "h-[calc(100%-80px)]"
+            )}>
             <div
                 className="
                 hidden
