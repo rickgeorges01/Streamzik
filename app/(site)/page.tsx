@@ -6,32 +6,34 @@ import PageContent from "@/app/(site)/components/PageContent";
 
 // Configure la stratégie de mise en cache des pages statiques.
 // Une valeur de 0 signifie que la page est toujours régénérée à chaque demande.
-export const revalidate=0;
+export const revalidate = 0;
 
 export default async function Home() {
-    const songs = await getSongs();
-  return (
-    <div className="
+    const songs = await getSongs()
+
+
+    return (
+        <div className="
         bg-neutral-900
         rounded-lg
         h-full
         overflow-hidden
         overflow-y-auto
     ">
-        <Header>
-           <div className="mb-2">
-               <h1
-                className="
+            <Header>
+                <div className="mb-2">
+                    <h1
+                        className="
                     text-white
                     text-3xl
                     font-semibold
                 "
-               >
-                   Welcome back
-               </h1>
+                    >
+                        Welcome back
+                    </h1>
 
-               <div
-                   className="
+                    <div
+                        className="
                         grid
                         grid-cols-1
                         sm:grid-cols-2
@@ -40,23 +42,23 @@ export default async function Home() {
                         gap-3
                         mt-4
                    "
-               >
-                    <ListItem
-                        image="/images/liked.png"
-                        name="Liked Songs"
-                        href="liked"
-                    />
-               </div>
-           </div>
-        </Header>
-        <div className="mt-2 mb-7 px-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-white text-2xl font-semibold ">
-                   Newest songs
-                </h1>
+                    >
+                        <ListItem
+                            image="/images/liked.png"
+                            name="Liked Songs"
+                            href="liked"
+                        />
+                    </div>
+                </div>
+            </Header>
+            <div className="mt-2 mb-7 px-6">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-white text-2xl font-semibold ">
+                        Newest songs
+                    </h1>
+                </div>
+                <PageContent songs={songs}/>
             </div>
-           <PageContent songs={songs}/>
         </div>
-    </div>
-  );
+    );
 }

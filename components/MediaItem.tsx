@@ -6,21 +6,21 @@ import useLoadImage from "@/hooks/UseLoadImage";
 import Image from "next/image";
 
 // Définition des propriétés attendues par le composant MediaItem
-interface MediaItemProps{
+interface MediaItemProps {
     // Propriété data de type Song représentant les données de la chanson
-    data : Song;
+    data: Song;
     // Propriété optionnelle onClick qui prend une chaîne en argument et retourne void
-    onClick?:(id: string) => void;
+    onClick?: (id: string) => void;
 
 }
 
-const MediaItem : React.FC <MediaItemProps> = ({
-    data,
-    onClick
-}) => {
+const MediaItem: React.FC<MediaItemProps> = ({
+                                                 data,
+                                                 onClick
+                                             }) => {
     const imageUrl = useLoadImage(data);
-    const handleClick = () =>{
-        if (onClick){
+    const handleClick = () => {
+        if (onClick) {
             return onClick(data.id)
         }
         //Todo:default turn on player
