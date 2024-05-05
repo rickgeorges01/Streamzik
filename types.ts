@@ -48,6 +48,11 @@ export interface Price{
     products?:Product;
 }
 
+//Interface pour les produits et les prix
+export interface ProductWithPrice extends Product {
+    prices?: Price[]
+}
+
 // Interface pour les détails d'un abonnement.
 export interface Subscription {
     id: string;

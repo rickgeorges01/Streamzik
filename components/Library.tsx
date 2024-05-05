@@ -11,6 +11,7 @@ import useUploadModal from "@/hooks/useUploadModal";
 import {Song} from "@/types";
 import MediaItem from "@/components/MediaItem";
 import useOnPlay from "@/hooks/useOnPlay";
+import useSubscribeModal from "@/hooks/useSubscribeModal";
 
 
 interface LibraryProps {
@@ -20,12 +21,13 @@ interface LibraryProps {
 const Library : React.FC<LibraryProps> = ({
     songs
                                           }) => {
+    const subscribeModal = useSubscribeModal();
     // Utilisation du hook useAuthModal pour la gestion de la modal d'authentification
     const authModal = useAuthModal();
     // Utilisation du hook useUploadModal pour la gestion de la modal de téléchargement
     const uploadModal = useUploadModal();
     // Utilisation du hook useUser pour récupérer l'utilisateur actuel
-    const { user } = useUser();
+    const { user,subscription } = useUser();
 
     const onPlay = useOnPlay(songs);
 
@@ -35,8 +37,11 @@ const Library : React.FC<LibraryProps> = ({
             // Si l'utilisateur n'est pas connecté, ouvrir la modal d'authentification
             return authModal.onOpen();
         }
+
+        if (!subscription){
+            return subscribeModal.onOpen();
+        }
         // Si l'utilisateur est connecté, vérifier les abonnements et ouvrir la modal de téléchargement
-        //ToDo:check for subscriptions
         return uploadModal.onOpen();
     };
 

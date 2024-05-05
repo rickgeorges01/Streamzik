@@ -2,6 +2,7 @@ import { Song } from "@/types";
 import usePlayer from "@/hooks/usePlayer";
 import useAuthModal from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
+import useSubscribeModal from "@/hooks/useSubscribeModal";
 
 // Définit le hook personnalisé useOnPlay
 const useOnPlay = (songs: Song[]) => {
@@ -10,7 +11,9 @@ const useOnPlay = (songs: Song[]) => {
     // Récupère l'état du modal d'authentification en utilisant useAuthModal
     const authModal = useAuthModal();
     // Récupère l'utilisateur en cours en utilisant useUser
-    const { user } = useUser();
+    const { user,subscription } = useUser();
+    const subscribeModal = useSubscribeModal();
+
 
     // Définit la fonction onPlay qui sera renvoyée par le hook
     const onPlay = (id: string) => {
@@ -19,7 +22,9 @@ const useOnPlay = (songs: Song[]) => {
             // Si aucun utilisateur n'est connecté, ouvre le modal d'authentification
             return authModal.onOpen();
         }
-
+        if(!subscription){
+            return subscribeModal.onOpen();
+        }
         // Définit l'identifiant de la piste audio à lire dans le lecteur audio
         player.setId(id);
         // Définit les identifiants de toutes les pistes audio à lire dans le lecteur audio en fonction de l'emplacemnt (Liked, library etc...)

@@ -1,11 +1,18 @@
 "use client"
 import {Fragment, useEffect, useState} from "react";
 
-import Modal from "@/components/Modal";
 import AuthModal from "@/components/AuthModal";
 import UploadModal from "@/components/UploadModal";
+import SubscribeModal from "@/components/SubscribeModal";
+import {ProductWithPrice} from "@/types";
 
-const ModalProvider = () => {
+
+interface ModalProviderProps {
+    products : ProductWithPrice[];
+}
+const ModalProvider: React.FC<ModalProviderProps> = ({
+    products
+                                                     }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     // Utilisation du hook useEffect pour effectuer une action après le rendu initial
@@ -23,6 +30,7 @@ const ModalProvider = () => {
         <Fragment>
             <AuthModal/>
             <UploadModal/>
+            <SubscribeModal products={products}/>
         </Fragment>
     );
 }
