@@ -36,6 +36,7 @@ export async function POST(request: Request) {
 
         // Crée une session de paiement Stripe
         const session = await stripe.checkout.sessions.create({
+            // @ts-ignore
             payment_method_types: ["card"], // Autorise les paiements par carte
             billing_address_collection: 'required', // Demande l'adresse de facturation
             customer, // Associe la session au client Stripe
