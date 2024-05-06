@@ -18,6 +18,7 @@ import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2"; // Icônes pour
 import Slider from "@/components/Slider"; // Composant pour ajuster le volume
 import usePlayer from "@/hooks/usePlayer"; // Hook pour accéder aux informations du lecteur
 import { useEffect, useState } from "react";
+//@ts-ignore
 import useSound from "use-sound"; // Hook pour gérer la lecture audio
 
 // Interface définissant les propriétés du composant `PlayerContent`
