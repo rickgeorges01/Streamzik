@@ -1,38 +1,53 @@
-import { Song } from "@/types";
-import usePlayer from "@/hooks/usePlayer";
-import useAuthModal from "@/hooks/useAuthModal";
-import { useUser } from "@/hooks/useUser";
-import useSubscribeModal from "@/hooks/useSubscribeModal";
+/**
+ * `useOnPlay` est un hook personnalisé qui gère la logique de lecture des chansons.
+ * - `usePlayer` fournit l'accès au lecteur audio pour gérer la lecture.
+ * - `useAuthModal` gère l'ouverture du modal d'authentification si nécessaire.
+ * - `useUser` permet de vérifier si un utilisateur est connecté et d'obtenir ses informations.
+ * - `useSubscribeModal` ouvre le modal d'abonnement si l'utilisateur n'est pas abonné.
+ * Ce hook est utilisé pour déclencher la lecture des chansons tout en gérant les conditions d'accès.
+ */
 
-// Définit le hook personnalisé useOnPlay
+// Importation des types et hooks nécessaires
+import { Song } from "@/types"; // Type représentant une chanson
+import usePlayer from "@/hooks/usePlayer"; // Hook pour accéder aux informations du lecteur
+import useAuthModal from "@/hooks/useAuthModal"; // Hook pour gérer le modal d'authentification
+import { useUser } from "@/hooks/useUser"; // Hook pour accéder aux informations de l'utilisateur
+import useSubscribeModal from "@/hooks/useSubscribeModal"; // Hook pour gérer le modal d'abonnement
+
+// Définition du hook `useOnPlay`
 const useOnPlay = (songs: Song[]) => {
-    // Récupère l'état du lecteur audio en utilisant usePlayer
+    // Récupère l'état du lecteur audio
     const player = usePlayer();
-    // Récupère l'état du modal d'authentification en utilisant useAuthModal
+    // Récupère l'état du modal d'authentification
     const authModal = useAuthModal();
-    // Récupère l'utilisateur en cours en utilisant useUser
-    const { user,subscription } = useUser();
+    // Récupère l'utilisateur en cours et l'abonnement
+    const { user, subscription } = useUser();
     const subscribeModal = useSubscribeModal();
 
-
-    // Définit la fonction onPlay qui sera renvoyée par le hook
+    // Définit la fonction `onPlay` pour gérer la lecture
     const onPlay = (id: string) => {
         // Vérifie si aucun utilisateur n'est connecté
         if (!user) {
-            // Si aucun utilisateur n'est connecté, ouvre le modal d'authentification
+            // Ouvre le modal d'authentification si aucun utilisateur n'est connecté
             return authModal.onOpen();
         }
-        if(!subscription){
+
+        // Vérifie si l'utilisateur n'est pas abonné
+        if (!subscription) {
+            // Ouvre le modal d'abonnement si l'utilisateur n'est pas abonné
             return subscribeModal.onOpen();
         }
-        // Définit l'identifiant de la piste audio à lire dans le lecteur audio
+
+        // Définit l'identifiant de la piste audio à lire dans le lecteur
         player.setId(id);
-        // Définit les identifiants de toutes les pistes audio à lire dans le lecteur audio en fonction de l'emplacemnt (Liked, library etc...)
+
+        // Définit les identifiants de toutes les pistes audio à lire
         player.setIds(songs.map((song) => song.id));
     };
 
-    // Renvoie la fonction onPlay
+    // Retourne la fonction `onPlay`
     return onPlay;
 };
 
-export default useOnPlay; // Exporte le hook useOnPlay
+// Exportation du hook pour utilisation ailleurs dans l'application
+export default useOnPlay;

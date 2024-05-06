@@ -1,19 +1,24 @@
-import {create} from "zustand"
+// Importation de la fonction 'create' de la bibliothèque Zustand pour créer un store
+import { create } from "zustand";
 
-// Définit une interface TypeScript décrivant la forme de l'état géré par ce store
-interface AuthModalStore{
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
+// Interface TypeScript définissant la structure de l'état du store
+interface AuthModalStore {
+    isOpen: boolean; // Indique si la fenêtre modale est ouverte ou fermée
+    onOpen: () => void; // Fonction pour ouvrir la fenêtre modale
+    onClose: () => void; // Fonction pour fermer la fenêtre modale
 }
-// Utilise la fonction 'create' de Zustand pour créer un hook personnalisé 'useAuthModal'
-const useAuthModal = create<AuthModalStore>((set)=>({
-    // Initialise la propriété 'isOpen' à 'false', indiquant que le modal est fermé initialement
-    isOpen: false,
-    // Définit la fonction 'onOpen' qui ouvre le modal en mettant à jour l'état avec 'isOpen' à 'true'
-    onOpen: () => set({isOpen:true}),
-    // Définit la fonction 'onClose' qui ferme le modal en mettant à jour l'état avec 'isOpen' à 'false'
-    onClose: () => set({isOpen:false})
+
+// Création d'un hook personnalisé `useAuthModal` avec Zustand
+const useAuthModal = create<AuthModalStore>((set) => ({
+    // Initialisation de l'état du store
+    isOpen: false, // Initialise à 'false', indiquant que la fenêtre modale est fermée
+
+    // Fonction pour ouvrir la fenêtre modale
+    onOpen: () => set({ isOpen: true }),
+
+    // Fonction pour fermer la fenêtre modale
+    onClose: () => set({ isOpen: false })
 }));
 
+// Exportation du hook personnalisé pour utilisation dans d'autres parties de l'application
 export default useAuthModal;

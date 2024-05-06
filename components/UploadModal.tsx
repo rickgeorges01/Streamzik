@@ -1,190 +1,191 @@
+// Indique que ce composant doit s'exécuter côté client
 "use client"
-import Modal from "@/components/Modal";
-// Importation de la fonction uniqid depuis le module "uniqid" pour générer des identifiants uniques
-import uniqid from "uniqid";
-import useUploadModal from "@/hooks/useUploadModal";
-// Importation des fonctionnalités useForm et SubmitHandler depuis le module "react-hook-form" pour gérer le formulaire
-import {FieldValues, SubmitHandler, useForm} from "react-hook-form";
-import {useState} from "react";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-// Importation de la fonction toast depuis le module "react-hot-toast" pour afficher des notifications
-import toast from "react-hot-toast";
-import {useUser} from "@/hooks/useUser";
-import {useSupabaseClient} from "@supabase/auth-helpers-react";
-import {useRouter} from "next/navigation";
 
+// Importation des modules nécessaires
+import Modal from "@/components/Modal"; // Composant Modal pour afficher le formulaire
+import uniqid from "uniqid"; // Génère des identifiants uniques
+import useUploadModal from "@/hooks/useUploadModal"; // Hook personnalisé pour gérer l'état de la modale
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form"; // Pour la gestion des formulaires
+import { useState } from "react";
+import Input from "@/components/Input"; // Composant Input pour le formulaire
+import Button from "@/components/Button"; // Composant Button pour le formulaire
+import toast from "react-hot-toast"; // Affiche des notifications toast
+import { useUser } from "@/hooks/useUser"; // Hook pour obtenir les détails de l'utilisateur
+import { useSupabaseClient } from "@supabase/auth-helpers-react"; // Fournit le client Supabase
+import { useRouter } from "next/navigation"; // Permet de rafraîchir la page après la soumission
+
+// Composant UploadModal pour gérer l'ajout de chansons
 const UploadModal = () => {
-    // État pour gérer le chargement
-    const [isLoading,setIsLoading] = useState(false);
-    // Utilisation du hook pour récupérer l'utilisateur
-    const {user} = useUser();
-    // Utilisation du router de Next.js
+    // Gère l'état de chargement pour afficher ou masquer les éléments de la modale pendant les opérations asynchrones
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Utilise le hook personnalisé pour accéder aux détails de l'utilisateur
+    const { user } = useUser();
+
+    // Utilise le routeur Next.js pour rafraîchir la page
     const router = useRouter();
-    // Utilisation du client Supabase
+
+    // Crée un client Supabase pour les requêtes
     const supabaseClient = useSupabaseClient();
-    // Utilisation du hook pour la modal
+
+    // Utilise le hook personnalisé pour gérer l'état du modal de téléchargement
     const uploadModal = useUploadModal();
 
-    // Initialisation des fonctions de gestion du formulaire avec react-hook-form
-    const {
-        register,
-        handleSubmit,
-        reset
-    } =
-        // Utilisation du hook useForm pour gérer le formulaire
-        useForm<FieldValues>({
-        defaultValues:{
-            // Valeurs par défaut des champs du formulaire
-            author:'',
-            title:'',
-            song:null,
-            image:null,
+    // Initialise les fonctions de gestion du formulaire
+    const { register, handleSubmit, reset } = useForm<FieldValues>({
+        defaultValues: {
+            // Valeurs par défaut du formulaire
+            author: '',
+            title: '',
+            song: null,
+            image: null,
         }
-    })
+    });
 
-    // Fonction appelée lors de la soumission du formulaire
-    const onSubmit:SubmitHandler<FieldValues> = async (values) => {
-        try{
+    // Fonction de soumission du formulaire
+    const onSubmit: SubmitHandler<FieldValues> = async (values) => {
+        try {
+            // Démarre le chargement
             setIsLoading(true);
 
-            // Récupération des fichiers de chanson et d'image à partir des valeurs soumises
-            const imageFile=values.image?.[0];
-            const songFile=values.song?.[0];
+            // Récupère les fichiers de chanson et d'image
+            const imageFile = values.image?.[0];
+            const songFile = values.song?.[0];
 
-            // Vérification de la présence des fichiers et de l'utilisateur
-            if(!imageFile || !songFile || !user ){
-                // Affichage d'une erreur si des champs sont manquants
+            // Vérifie la présence des fichiers et de l'utilisateur
+            if (!imageFile || !songFile || !user) {
                 toast.error('Missing fields');
                 return;
             }
-            // Génération d'un identifiant unique
+
+            // Génère un identifiant unique
             const uniqueID = uniqid();
 
-            //Téléchargement du fichier de chanson vers le stockage Supabase
+            // Télécharge le fichier de chanson dans le stockage Supabase
             const {
-                data:songData,
-                error:songError,
+                data: songData,
+                error: songError,
             } = await supabaseClient.storage.from('songs')
-                .upload(`song-${values.title}-${uniqueID}`,songFile,{
-                    cacheControl:'3600',
-                    upsert:false
-                })
-            // Gestion des erreurs lors du téléchargement de la chanson
-            if (songError){
+                .upload(`song-${values.title}-${uniqueID}`, songFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            // Gère les erreurs lors du téléchargement de la chanson
+            if (songError) {
                 setIsLoading(false);
                 return toast.error('Failed song upload');
             }
 
-            // Téléchargement du fichier image vers le stockage Supabase
+            // Télécharge le fichier image dans le stockage Supabase
             const {
-                data:imageData,
-                error:imageError,
+                data: imageData,
+                error: imageError,
             } = await supabaseClient.storage.from('images')
-                .upload(`image-${values.title}-${uniqueID}`,imageFile,{
-                    cacheControl:'3600',
-                    upsert:false
-                })
-            // Gestion des erreurs lors du téléchargement de l'image
-            if (imageError){
+                .upload(`image-${values.title}-${uniqueID}`, imageFile, {
+                    cacheControl: '3600',
+                    upsert: false
+                });
+
+            // Gère les erreurs lors du téléchargement de l'image
+            if (imageError) {
                 setIsLoading(false);
                 return toast.error('Failed image upload');
             }
-            // Insertion des données de la chanson dans la base de données Supabase
+
+            // Insère les données de la chanson dans la base de données Supabase
             const {
                 error: supabaseError,
             } = await supabaseClient.from('songs')
                 .insert({
-                    user_id :user.id,
-                    title:values.title,
-                    author:values.author,
-                    image_path:imageData.path,
+                    user_id: user.id,
+                    title: values.title,
+                    author: values.author,
+                    image_path: imageData.path,
                     song_path: songData.path
                 });
-            // Gestion des erreurs lors de l'insertion des données dans la base de données
-            if (supabaseError){
+
+            // Gère les erreurs lors de l'insertion des données
+            if (supabaseError) {
                 setIsLoading(false);
                 return toast.error(supabaseError.message);
             }
 
-            // Actualisation de la page
+            // Rafraîchit la page
             router.refresh();
             setIsLoading(false);
-            toast.success('song created successfully');
-            // Réinitialisation du formulaire
-            reset();
-
-            uploadModal.onClose();
+            toast.success('Song created successfully');
+            reset(); // Réinitialise le formulaire
+            uploadModal.onClose(); // Ferme la modale
 
         } catch (err) {
             toast.error("Something went wrong!")
-        }finally {
-            setIsLoading(true)
+        } finally {
+            setIsLoading(true);
         }
-
     }
-    // Fonction appelée lors du changement d'état de la modal
-    const onChange = (open:boolean) => {
+
+    // Gère la fermeture de la modale
+    const onChange = (open: boolean) => {
         if (!open) {
-            reset();
-            uploadModal.onClose();
+            reset(); // Réinitialise le formulaire
+            uploadModal.onClose(); // Ferme la modale
         }
     }
 
+    // Rendu du composant
     return (
         <Modal
-            title="Add a song"
-            description="Upload an MP3 Files..."
-            // Propriété indiquant si la modal est ouverte ou non
-            isOpen= {uploadModal.isOpen}
-            // Fonction appelée lors du changement d'état de la modal
-            onChange={onChange}
+            title="Add a song" // Titre de la modale
+            description="Upload an MP3 Files..." // Description de la modale
+            isOpen={uploadModal.isOpen} // Indique si la modale est ouverte
+            onChange={onChange} // Gère la fermeture de la modale
         >
             <form
-                // Soumission du formulaire à la fonction onSubmit
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)} // Gère la soumission du formulaire
                 className="flex flex-col gap-y-4"
             >
+                {/* Champ d'entrée pour le titre de la chanson */}
                 <Input
                     id="title"
                     disabled={isLoading}
-                    // Enregistrement du champ 'title' avec validation
-                    {...register('title', {required: true})}
+                    {...register('title', { required: true })}
                     placeholder="Song Title"
                 />
+
+                {/* Champ d'entrée pour l'auteur de la chanson */}
                 <Input
                     id="author"
                     disabled={isLoading}
-                    // Enregistrement du champ 'author' avec validation
-                    {...register('author', {required: true})}
-                    placeholder="Song author"
+                    {...register('author', { required: true })}
+                    placeholder="Song Author"
                 />
+
                 <div>
-                    <div className="pb-1">
-                        Select a song file
-                    </div>
+                    <div className="pb-1">Select a song file</div>
+                    {/* Champ d'entrée pour le fichier MP3 */}
                     <Input
                         id="song"
                         type="file"
                         disabled={isLoading}
                         accept=".mp3"
-                        // Enregistrement du champ 'song' avec validation
-                        {...register('song', {required: true})}
+                        {...register('song', { required: true })}
                     />
                 </div>
+
                 <div>
-                    <div className="pb-1">
-                        Select an image
-                    </div>
+                    <div className="pb-1">Select an image</div>
+                    {/* Champ d'entrée pour le fichier image */}
                     <Input
                         id="image"
                         type="file"
                         disabled={isLoading}
                         accept="image/*"
-                        // Enregistrement du champ 'image' avec validation
-                        {...register('image', {required: true})}
+                        {...register('image', { required: true })}
                     />
                 </div>
+
+                {/* Bouton pour soumettre le formulaire */}
                 <Button disabled={isLoading} type="submit">
                     Create
                 </Button>
@@ -192,4 +193,6 @@ const UploadModal = () => {
         </Modal>
     );
 }
+
+// Exportation du composant
 export default UploadModal;

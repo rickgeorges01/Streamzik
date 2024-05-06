@@ -1,30 +1,28 @@
+// "use client" : Directive indiquant que ce composant s'exécute côté client
 "use client";
 
-import { Song } from "@/types";
-import useLoadImage from "@/hooks/UseLoadImage";
-import Image from "next/image";
-import PlayButton from "@/components/PlayButton";
+// Importation des modules nécessaires
+import { Song } from "@/types"; // Type représentant une chanson
+import useLoadImage from "@/hooks/UseLoadImage"; // Hook personnalisé pour charger l'URL de l'image
+import Image from "next/image"; // Composant Image de Next.js pour gérer les images
+import PlayButton from "@/components/PlayButton"; // Composant bouton de lecture
 
 // Définition de l'interface SongItemProps pour décrire les propriétés attendues par le composant SongItem
 interface SongItemProps {
-    // Les données de la chanson (Song)
-    data: Song;
-    // La fonction à appeler lorsqu'un clic est effectué sur le composant
-    onClick: (id: string) => void;
+    data: Song; // Les données de la chanson (Song)
+    onClick: (id: string) => void; // Fonction à appeler lors du clic sur l'élément
 }
 
-// Définition du composant SongItem comme une fonction composant React prenant en paramètre les propriétés de SongItemProps
-const SongItem: React.FC<SongItemProps> = ({
-                                               data, onClick
-}) => {
+// Définition du composant SongItem
+// Fonctionnalité : Affiche les détails d'une chanson, y compris son image, titre et auteur, ainsi qu'un bouton de lecture
+const SongItem: React.FC<SongItemProps> = ({ data, onClick }) => {
     // Utilisation du hook useLoadImage pour charger l'URL de l'image associée à la chanson
     const imagePath = useLoadImage(data);
 
-    // Renvoie le JSX du composant SongItem
+    // Rendu du composant SongItem
     return (
         <div
-            // Gère l'événement onClick en appelant la fonction onClick avec l'ID de la chanson en argument
-            onClick={() => onClick(data.id)}
+            onClick={() => onClick(data.id)} // Gestion du clic sur l'élément
             className="
                 relative
                 group
@@ -55,12 +53,12 @@ const SongItem: React.FC<SongItemProps> = ({
                 {/* Affiche l'image de la chanson */}
                 <Image
                     className="object-cover"
-                    // Utilise l'URL de l'image chargée ou une image de remplacement par défaut
-                    src={imagePath || '/images/liked.png'}
+                    src={imagePath || '/images/liked.png'} // Utilise l'URL de l'image ou une image par défaut
                     fill
                     alt="Image"
                 />
             </div>
+
             <div className="flex flex-col items-start w-full p-4 gap-y-1">
                 <p className="font-semibold truncate w-full">
                     {data.title} {/* Affiche le titre de la chanson */}
@@ -77,7 +75,8 @@ const SongItem: React.FC<SongItemProps> = ({
                     By {data.author} {/* Affiche l'auteur de la chanson */}
                 </p>
             </div>
-            {/* Affiche le bouton de lecture de la chanson */}
+
+            {/* Affiche le bouton de lecture */}
             <div
                 className="
                     absolute
@@ -85,11 +84,11 @@ const SongItem: React.FC<SongItemProps> = ({
                     right-5
                 "
             >
-                <PlayButton/>
+                <PlayButton />
             </div>
         </div>
     );
 }
 
-
+// Exportation du composant pour utilisation ailleurs dans l'application
 export default SongItem;

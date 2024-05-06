@@ -7,16 +7,13 @@
  * Utilisé principalement pour sécuriser les routes et les fonctionnalités qui nécessitent une vérification de l'authentification utilisateur.
  */
 
-
-
-
 // Importation de la fonction createMiddlewareClient depuis le package "@supabase/auth-helpers-nextjs"
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 // Importation des types NextRequest et NextResponse depuis le module "next/server"
 import { NextRequest, NextResponse } from "next/server";
 
 // Définition de la fonction middleware
-export async function middleware(req: NextRequest){
+export async function middleware(req: NextRequest) {
     // Création d'une réponse Next.js
     const res = NextResponse.next();
 

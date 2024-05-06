@@ -1,34 +1,38 @@
-// Importation de la classe ProductWithPrice depuis le fichier de définition de type (types.ts ?) dans le répertoire "@/types"
-import {ProductWithPrice} from "@/types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-// Importation de l'objet cookies depuis le module "next/headers"
-import { cookies } from "next/headers";
+/**
+ * `getActiveProductsWithPrices` est une fonction qui récupère les produits actifs et leurs prix associés à partir de Supabase.
+ * - `createServerComponentClient` crée un client Supabase pour les composants côté serveur.
+ * - `cookies` est utilisé pour obtenir l'authentification nécessaire pour accéder aux données.
+ * - La fonction retourne une promesse qui résout vers un tableau de produits avec leurs prix (ProductWithPrice[]).
+ */
 
-// Définition de la fonction getSongs qui retourne une promesse d'un tableau de Produit et prix (ProductWithPrice[])
+import { ProductWithPrice } from "@/types"; // Importation du type représentant les produits avec leurs prix
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"; // Client Supabase pour les composants serveur
+import { cookies } from "next/headers"; // Importation de `cookies` pour l'authentification
+
+// Fonction pour récupérer les produits actifs avec leurs prix
 const getActiveProductsWithPrices = async (): Promise<ProductWithPrice[]> => {
-
-    // En passant l'objet cookies en tant qu'option lors de la création du client Supabase
+    // Crée un client Supabase pour accéder aux données côté serveur
     const supabase = createServerComponentClient({
-        cookies: cookies // Les cookies sont utilisés pour l'authentification et d'autres fonctionnalités côté serveur
+        cookies: cookies // Utilise les cookies pour l'authentification
     });
 
-    // Récupération des données de la table 'products' à partir de Supabase
-    const { data, error } = await supabase.from('products')
-        // Sélection de toutes les colonnes (*)
-        .select('*,prices(*)')
-        .eq('active',true)
-        .eq('prices.active',true)
-        .order('metadata->index')
-        .order('unit_amount', { foreignTable: 'prices' });
+    // Récupère les produits et leurs prix à partir de Supabase
+    const { data, error } = await supabase
+        .from('products') // Sélectionne la table `products`
+        .select('*, prices(*)') // Sélectionne toutes les colonnes et les prix associés
+        .eq('active', true) // Filtre pour les produits actifs
+        .eq('prices.active', true) // Filtre pour les prix actifs
+        .order('metadata->index') // Trie par l'index dans les métadonnées
+        .order('unit_amount', { foreignTable: 'prices' }); // Trie par le montant unitaire des prix
 
-    // Gestion des erreurs, si une erreur survient lors de la récupération des données
+    // Gère les erreurs de récupération des données
     if (error) {
-        // Affichage de l'erreur dans la console
-        console.log(error);
+        console.log(error); // Affiche l'erreur dans la console
     }
 
     // Retourne les données récupérées sous forme de tableau (ou un tableau vide si aucune donnée n'a été trouvée)
     return (data as any) || [];
 };
 
+// Exportation de la fonction pour utilisation ailleurs dans l'application
 export default getActiveProductsWithPrices;

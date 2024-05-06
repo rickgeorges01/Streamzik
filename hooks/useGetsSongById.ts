@@ -1,61 +1,71 @@
+/**
+ * `useGetsSongById` est un hook personnalisé qui récupère une chanson en fonction de son identifiant.
+ * - `useState` initialise `isLoading` pour indiquer l'état du chargement et `song` pour stocker la chanson récupérée.
+ * - `useSessionContext` fournit l'accès au client Supabase.
+ * - `useEffect` gère la récupération de la chanson lorsque l'identifiant change.
+ * - `useMemo` optimise le retour du hook en mémorisant les valeurs `isLoading` et `song`.
+ * Ce hook est utilisé pour obtenir les détails d'une chanson à partir de la base de données Supabase.
+ */
+
+// Importation des hooks et types nécessaires
 import { useEffect, useMemo, useState } from "react";
 import { Song } from "@/types";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import toast from "react-hot-toast";
 
+// Définition du hook `useGetsSongById`
 const useGetsSongById = (id?: string) => {
-    // Définit les états isLoading et song avec useState
-    const [isLoading, setIsLoading] = useState(false); // État pour indiquer si la récupération est en cours
-    const [song, setSong] = useState<Song | undefined>(undefined); // État pour stocker la chanson récupérée
+    // Initialisation des états `isLoading` et `song`
+    const [isLoading, setIsLoading] = useState(false); // Indique si la récupération est en cours
+    const [song, setSong] = useState<Song | undefined>(undefined); // Stocke la chanson récupérée
 
-    // Récupère le client supabase de la session en cours en utilisant useSessionContext
+    // Obtient le client Supabase de la session en cours
     const { supabaseClient } = useSessionContext();
 
-    // Utilise useEffect pour effectuer la récupération de la chanson lorsqu'un nouvel identifiant est fourni
+    // Utilise `useEffect` pour récupérer la chanson lorsque `id` change
     useEffect(() => {
         // Vérifie si l'identifiant est défini
-        if (!id) {
-            return;
-        }
+        if (!id) return;
 
         // Indique que la récupération est en cours
         setIsLoading(true);
 
-        // Fonction asynchrone pour récupérer la chanson à partir de son identifiant
+        // Fonction asynchrone pour récupérer la chanson par son identifiant
         const fetchSong = async () => {
-            // Utilise le client supabase pour sélectionner une chanson à partir de son identifiant
+            // Utilise le client Supabase pour récupérer la chanson par ID
             const { data, error } = await supabaseClient
-                .from('songs')
-                .select('*')
-                .eq('id', id)
-                .single();
+                .from('songs') // Accède à la table `songs`
+                .select('*') // Sélectionne toutes les colonnes
+                .eq('id', id) // Filtre par identifiant
+                .single(); // Récupère une seule ligne
 
             // Gère les erreurs de récupération de la chanson
             if (error) {
                 setIsLoading(false); // Arrête le chargement
-                toast.error(error.message); // Affiche un message d'erreur à l'utilisateur
+                toast.error(error.message); // Affiche un message d'erreur
+                return;
             }
 
-            // Met à jour l'état song avec la chanson récupérée
+            // Met à jour `song` avec la chanson récupérée
             setSong(data as Song);
 
             // Indique que la récupération est terminée
             setIsLoading(false);
         };
 
-        // Appelle la fonction de récupération de la chanson
+        // Appelle `fetchSong` pour récupérer la chanson
         fetchSong();
-        // Effectue le chargement à chaque changement de l'identifiant ou du client supabase
+        // Réexécute la récupération lorsque `id` ou `supabaseClient` change
     }, [id, supabaseClient]);
 
-    // Utilise useMemo pour optimiser les performances en évitant de recréer l'objet à chaque rendu
+    // Utilise `useMemo` pour optimiser les performances
     return useMemo(() => ({
-        // Renvoie l'état isLoading
+        // Retourne l'état `isLoading` et `song`
         isLoading,
-        // Renvoie l'état song
         song
-        // Recalcule seulement lorsque isLoading ou song change
+        // Recalcule seulement lorsque `isLoading` ou `song` change
     }), [isLoading, song]);
 };
 
+// Exportation du hook pour utilisation ailleurs dans l'application
 export default useGetsSongById;

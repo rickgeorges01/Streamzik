@@ -1,13 +1,16 @@
-// Importation de la classe Song depuis le fichier de définition de type (types.ts ?) dans le répertoire "@/types"
+// Importation du type Song depuis le fichier de définition des types (types.ts)
 import { Song } from "@/types";
+
+// Importation de la fonction createServerComponentClient pour créer un client Supabase côté serveur
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-// Importation de l'objet cookies depuis le module "next/headers"
+
+// Importation de l'objet cookies pour gérer les cookies côté serveur
 import { cookies } from "next/headers";
 
 // Définition de la fonction getSongs qui retourne une promesse d'un tableau de chansons (Song[])
 const getSongs = async (): Promise<Song[]> => {
 
-    // En passant l'objet cookies en tant qu'option lors de la création du client Supabase
+    // Création d'un client Supabase côté serveur avec les cookies
     const supabase = createServerComponentClient({
         cookies: cookies // Les cookies sont utilisés pour l'authentification et d'autres fonctionnalités côté serveur
     });
@@ -29,4 +32,5 @@ const getSongs = async (): Promise<Song[]> => {
     return (data as any) || [];
 };
 
+// Exportation de la fonction getSongs pour l'utiliser ailleurs dans l'application
 export default getSongs;

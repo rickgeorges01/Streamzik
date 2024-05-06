@@ -14,7 +14,7 @@ className,
 type,
 // Indique si le champ de saisie est désactivé ou non
 disabled,
-// Autres propriétés fournies au champ de saisie
+// Autres propriétés fournies au champ de saisie.
 ...props}, ref) => {
     return (
         <input
