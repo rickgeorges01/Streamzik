@@ -1,6 +1,6 @@
 # StreamZik
 
-StreamZik is a robust Spotify clone designed to deliver a seamless music streaming experience. Dive into the details below to understand its features, architecture, and how to get started.
+StreamZik is an online music streaming and management application. Built with modern, high-performance technology, it offers an exceptional user experience.
 
 ## Key Features
 
@@ -45,7 +45,7 @@ StreamZik is a robust Spotify clone designed to deliver a seamless music streami
 
 ## Installation and Setup
 
-### Prerequisites/ build with
+### Technologies Used
 
 - Next.js 13.4
 - React
@@ -56,48 +56,6 @@ StreamZik is a robust Spotify clone designed to deliver a seamless music streami
 - npm (v6+)
 - Supabase account for backend services
 
-Instructions
-
-  Clone the Repository:
+## Test 
+- Visit the deployed site here: https://streamzik.vercel.app/
   
-    git clone https://github.com/yourusername/streamzik.git
-    cd streamzik
-    
-  Install Dependencies:
-
-    npm install
-
-  Environment Configuration:
-Create a .env file with the following variables:
-
-makefile
-
-    SUPABASE_URL=your-supabase-url
-    SUPABASE_KEY=your-supabase-key
-
-Running the Application
-
-    Start the Development Server:
-
-    bash
-
-    npm start
-
-    Access the Application:
-    Open your browser and visit http://localhost:3000.
-
-Project Structure
-
-    components/: UI components such as AuthModal, Button, and more.
-    contexts/: Providers like SupabaseProvider and ModalProvider.
-    hooks/: Custom hooks like useAuthModal, usePlayer, and others.
-    services/: Fetch functions for songs, users, etc.
-    styles/: Centralized styling resources.
-    utils/: General utility functions.
-
-License
-
-Distributed under the MIT License.
-Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or feature requests.
