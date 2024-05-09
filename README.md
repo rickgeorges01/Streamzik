@@ -43,18 +43,15 @@ StreamZik is an online music streaming and management application. Built with mo
 - **Cancelling Stripe Subscriptions**: Learn how to cancel Stripe subscriptions within the application.
 
 
-## Installation and Setup
-
-### Technologies Used
+## Technologies Used
 
 - Next.js 13.4
 - React
+- TypeScript
 - Tailwind CSS
 - Supabase
 - PostgreSQL
 - Stripe
-- npm (v6+)
-- Supabase account for backend services
 
 ## Test 
 - Visit the deployed site here: https://streamzik.vercel.app/
